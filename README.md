@@ -1,10 +1,14 @@
 # 💎 LoanIQ — AI Loan Approval Predictor
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Streamlit-1.32%2B-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Scikit--Learn-Random%20Forest-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Accuracy-97.8%25-22C55E?style=for-the-badge"/>
+  <img width="1920" height="1080" alt="Screenshot 2026-06-12 012647" src="https://github.com/user-attachments/assets/93882f32-8a45-4349-befe-50b911b411dd" />
+
+  <img width="1920" height="1080" alt="Screenshot 2026-06-12 012706" src="https://github.com/user-attachments/assets/c6239ded-27fa-4810-8ccc-104617dc952d" />
+
+  <img width="1920" height="1080" alt="Screenshot 2026-06-12 012724" src="https://github.com/user-attachments/assets/66d42beb-e0a3-45af-a0a7-f741763ddffc" />
+
+  <img width="1920" height="1080" alt="Screenshot 2026-06-12 012737" src="https://github.com/user-attachments/assets/6a259f40-17c5-41e7-8eea-b78dad455222" />
+
 </p>
 
 
