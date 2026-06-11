@@ -313,7 +313,12 @@ def load_dataset():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(base_dir, "loan_approval_dataset_download.csv")
     df = pd.read_csv(csv_path)
+
     df.columns = df.columns.str.strip()
+
+    df["loan_status"] = df["loan_status"].astype(str).str.strip()
+    df["education"] = df["education"].astype(str).str.strip()
+    df["self_employed"] = df["self_employed"].astype(str).str.strip()
     return df
 
 bundle = load_model()
@@ -645,18 +650,19 @@ with tab2:
     c3, c4 = st.columns(2)
     with c3:
         # Income vs Loan Amount scatter
+        
         sample = df_raw.sample(min(500, len(df_raw)), random_state=42)
-        colors_map = {"Approved": "#10B981", "Rejected": "#EF4444"}
-        fig_scatter = go.Figure()
-        for status, color in colors_map.items():
-            mask = sample["loan_status"] == status
-            fig_scatter.add_trace(go.Scatter(
-                x=sample[mask]["income_annum"] / 1e6,
-                y=sample[mask]["loan_amount"] / 1e6,
-                mode="markers",
-                name=status,
-                marker=dict(color=color, size=5, opacity=0.65)
-            ))
+
+        fig_scatter = px.scatter(
+    sample,
+    x="income_annum",
+    y="loan_amount",
+    color="loan_status",
+    color_discrete_map={
+        "Approved": "#10B981",
+        "Rejected": "#EF4444"
+    }
+)
         fig_scatter.update_layout(
             title=dict(text="Income vs Loan Amount (₹M)", font=dict(color="rgba(255,255,255,0.7)", size=14)),
             paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
@@ -669,12 +675,23 @@ with tab2:
 
     with c4:
         # Education vs Loan Status grouped bar
-        edu_status = df_raw.groupby(["education", "loan_status"]).size().reset_index(name="count")
-        fig_bar = go.Figure()
-        for status, color in colors_map.items():
-            d = edu_status[edu_status["loan_status"]==status]
-            fig_bar.add_trace(go.Bar(x=d["education"], y=d["count"], name=status,
-                                      marker_color=color, opacity=0.85))
+        edu_status = (
+    df_raw.groupby(["education", "loan_status"])
+    .size()
+    .reset_index(name="count")
+)
+
+        fig_bar = px.bar(
+    edu_status,
+    x="education",
+    y="count",
+    color="loan_status",
+    barmode="group",
+    color_discrete_map={
+        "Approved": "#10B981",
+        "Rejected": "#EF4444"
+    }
+)
         fig_bar.update_layout(
             title=dict(text="Education vs Loan Status", font=dict(color="rgba(255,255,255,0.7)", size=14)),
             barmode="group",
@@ -689,14 +706,17 @@ with tab2:
     # Data preview
     st.markdown('<div class="section-label" style="margin-top:10px;">Raw Data Preview</div>', unsafe_allow_html=True)
     n_rows = st.slider("Rows to show", 5, 50, 10)
-    st.dataframe(
-        df_raw.head(n_rows).style.applymap(
-            lambda v: "color: #10B981; font-weight:600" if v == "Approved" else ("color: #EF4444; font-weight:600" if v == "Rejected" else ""),
-            subset=["loan_status"]
-        ),
-        use_container_width=True,
-        height=280
-    )
+    styled_df = df_raw.head(n_rows).style.map(
+    lambda v: "color: #10B981; font-weight:600" if v == "Approved"
+    else "color: #EF4444; font-weight:600",
+    subset=["loan_status"]
+)
+
+st.dataframe(
+    styled_df,
+    use_container_width=True,
+    height=280
+)
 
 
 # ══════════════════════════════════════════════
